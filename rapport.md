@@ -121,7 +121,91 @@ La difféerence est que : `optimizer.zero_grad()` efface les gradients accumulé
 1) On utilise with torch.no_grad(): lors de l'évaluation pour désactiver la différenciation automatique, car les poids du réseau ne sont pas mis à jour.
 Cela libère une importante quantité de mémoire vidéo (VRAM) et accélère le calcul en évitant la construction inutile du graphe d'opérations.
 
-2) On doit s'attendre à une 
+2) On doit s'attendre à une accuracy de 10% car le jeune de données à 10 classes 
 
 
-### question 4e
+## Exo 5
+
+### question 5a 
+
+On doit inclure ça pour éviter d'écraser par erreur les données des entraînements précédents tout en pouvant  comparer et tracer facilement l'impact de chaque configuration dans TensorBoard.
+
+
+### output résultat entre q5b à 5c
+
+Output du script train_tb.py : 
+```
+Epoch 01 | train_loss=2.0610 | val_loss=2.0995 | val_acc=0.315
+Epoch 02 | train_loss=2.1212 | val_loss=2.2356 | val_acc=0.326
+Epoch 03 | train_loss=2.1047 | val_loss=2.1255 | val_acc=0.353
+Epoch 04 | train_loss=2.0866 | val_loss=2.4315 | val_acc=0.327
+Epoch 05 | train_loss=2.0595 | val_loss=2.1227 | val_acc=0.355
+Epoch 06 | train_loss=2.0553 | val_loss=2.0049 | val_acc=0.376
+Epoch 07 | train_loss=1.9951 | val_loss=2.2681 | val_acc=0.356
+Epoch 08 | train_loss=2.0153 | val_loss=2.2121 | val_acc=0.378
+Epoch 09 | train_loss=1.9733 | val_loss=2.3913 | val_acc=0.359
+Epoch 10 | train_loss=1.9715 | val_loss=2.2206 | val_acc=0.386
+```
+### question 5d
+
+`scp -r daberkane@157.159.104.128:"/Users/doha/Desktop/3A/Intro au deep learning/CSC8607/TP1" ./runs`
+
+C'est à la valeur de 0.99 que l'on voit mieux 
+![alt text](image.png)
+
+- Pourquoi observe-t-on autant de bruit sur Loss/train_step comparativement à Loss/train
+
+On observe autant de bruit car le nombre d'échantillon ne varie pas de la même manière.
+
+### question 5e 
+
+TODO: Analyse des graphes et des résultas des epochs
+
+
+Run 1 : LR = 1e-2, batch_size = 32
+
+```
+Epoch 01 | train_loss=2.0610 | val_loss=2.0995 | val_acc=0.315
+Epoch 02 | train_loss=2.1212 | val_loss=2.2356 | val_acc=0.326
+Epoch 03 | train_loss=2.1047 | val_loss=2.1255 | val_acc=0.353
+Epoch 04 | train_loss=2.0866 | val_loss=2.4315 | val_acc=0.327
+Epoch 05 | train_loss=2.0595 | val_loss=2.1227 | val_acc=0.355
+Epoch 06 | train_loss=2.0553 | val_loss=2.0049 | val_acc=0.376
+Epoch 07 | train_loss=1.9951 | val_loss=2.2681 | val_acc=0.356
+Epoch 08 | train_loss=2.0153 | val_loss=2.2121 | val_acc=0.378
+Epoch 09 | train_loss=1.9733 | val_loss=2.3913 | val_acc=0.359
+Epoch 10 | train_loss=1.9715 | val_loss=2.2206 | val_acc=0.386
+```
+
+Run 2 : LR = 1e-3, batch_size = 32
+
+```
+Epoch 01 | train_loss=1.6796 | val_loss=1.5914 | val_acc=0.445
+Epoch 02 | train_loss=1.4876 | val_loss=1.5359 | val_acc=0.457
+Epoch 03 | train_loss=1.4024 | val_loss=1.5374 | val_acc=0.467
+Epoch 04 | train_loss=1.3410 | val_loss=1.4753 | val_acc=0.493
+Epoch 05 | train_loss=1.2925 | val_loss=1.4765 | val_acc=0.491
+Epoch 06 | train_loss=1.2448 | val_loss=1.4482 | val_acc=0.504
+Epoch 07 | train_loss=1.2086 | val_loss=1.4610 | val_acc=0.499
+Epoch 08 | train_loss=1.1731 | val_loss=1.4616 | val_acc=0.503
+Epoch 09 | train_loss=1.1383 | val_loss=1.4704 | val_acc=0.509
+Epoch 10 | train_loss=1.1104 | val_loss=1.4675 | val_acc=0.511
+```
+![alt text](image-2.png)
+
+Run 3 : LR = 1e-1, batch_size = 128
+
+````
+Epoch 01 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 02 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 03 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 04 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 05 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 06 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 07 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 08 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 09 | train_loss=nan | val_loss=nan | val_acc=0.096
+Epoch 10 | train_loss=nan | val_loss=nan | val_acc=0.096
+```
+
+![alt text](image-1.png)
