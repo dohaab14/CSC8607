@@ -41,8 +41,7 @@ Device 0 name: NVIDIA L4
 
 ### question 3a
 
-mettre image
-
+![alt text](image-3.png)
 
 ### question 3b
 X  : (N, 3)
@@ -55,28 +54,26 @@ Y  : (N, t)
 
 ### question 3c
 
-TODO : mettre image
+![alt text](image-4.png)
+![alt text](image-5.png)
 
 ### question 3d
 
-TODO : mettre image 
-
+![alt text](image-6.png)
 
 ### question 3e
 
 - Pourquoi utilisons-nous la règle de la chaîne (chain rule) pour calculer les gradients dans les réseaux de neurones profonds ?
 
-TODO reprendre ce qui est écrit dans le cahier 
+![alt text](image-7.png)
 
 - Quelles sont les principales raisons d'utiliser des mini-batchs plutôt que d'optimiser sur un seul exemple à la fois ou sur l’ensemble total des données ?
 
-TODO  reprendre ce qui est écrit dans le cahier
-
+![alt text](image-8.png)
 
 ### question 3f
 
-TODO : mettre image 
-
+![alt text](image-9.png)
 
 ## Exo 4
 
@@ -95,7 +92,7 @@ On utilise cela car le torch.flatten permet de transformer le tenseur 4D qu'on a
 
 2) Pourquoi est-il crucial de ne pas ajouter de fonction d'activation Softmax à la fin de notre réseau quand on s'apprête à utiliser nn.CrossEntropyLoss dans PyTorch ?
 
-Il est crucial de ne pas ajouter de Softmax à al fin de notre réseau car la classe nn.CrossEntropyLoss de PyTorch intègre déjà cette opération (via LogSoftmax) de manière optimisée. Du coup si on ajoutait ça appliquerait la fonction deux fois et ça fausserait les gradients et la perte.
+Il est crucial de ne pas ajouter de Softmax à al fin de notre réseau car la classe nn.CrossEntropyLoss de PyTorch intègre déjà cette opération (avec LogSoftmax) de manière optimisée. Du coup si on ajoutait ça appliquerait la fonction deux fois et ça fausserait les gradients et la perte.
 
 ### question 4c
 
@@ -114,14 +111,14 @@ Epoch 10 | loss=1.9489 | acc=0.4266
 
 - Quelle est la différence fondamentale entre `optimizer.zero_grad()` et `loss.backward()` ?
 
-La difféerence est que : `optimizer.zero_grad()` efface les gradients accumulés lors des étapes précédentes tandis que `loss.backward()` calcule les nouveaux gradients de la perte par rapport aux paramètres du modèle via la rétropropagation
+La difféerence est que : `optimizer.zero_grad()` efface les gradients accumulés lors des étapes précédentes alors que `loss.backward()` calcule les nouveaux gradients de la perte, via la rétropropagation.
 
 ### question 4d
 
-1) On utilise with torch.no_grad(): lors de l'évaluation pour désactiver la différenciation automatique, car les poids du réseau ne sont pas mis à jour.
-Cela libère une importante quantité de mémoire vidéo (VRAM) et accélère le calcul en évitant la construction inutile du graphe d'opérations.
+1) On utilise with torch.no_grad() pour désactiver le suivi de graphe de calcul.
+Cela libère quantité de mémoire vidéo (VRAM) et du coup accélère le calcul en évitant la construction inutile du graphe de calcul.
 
-2) On doit s'attendre à une accuracy de 10% car le jeune de données à 10 classes 
+2) On doit s'attendre à une accuracy de 10% car le jeune de données à 10 classes.
 
 
 ## Exo 5
@@ -159,7 +156,9 @@ On observe autant de bruit car le nombre d'échantillon ne varie pas de la même
 
 ### question 5e 
 
-TODO: Analyse des graphes et des résultas des epochs
+1) Analyse des graphes et des résultas des epochs : j'avais un bug je pouvais pas superposer les 3graphes... Du coup en me basant sur les résultats des epochs, on peut constater que le run 2 donne la meilleure accuracy de validation avec environ 51.1 %, contre 38.6 % pour le run 1 et 9.6 % pour le Run 3.
+
+2) On voit que la perte d'entraînement continue de baisser tandis que la perte de validation stagne puis remonte. Cela ressemble à une forme de U.
 
 
 Run 1 : LR = 1e-2, batch_size = 32
@@ -177,6 +176,10 @@ Epoch 09 | train_loss=1.9733 | val_loss=2.3913 | val_acc=0.359
 Epoch 10 | train_loss=1.9715 | val_loss=2.2206 | val_acc=0.386
 ```
 
+![alt text](image.png)
+
+----
+
 Run 2 : LR = 1e-3, batch_size = 32
 
 ```
@@ -192,6 +195,8 @@ Epoch 09 | train_loss=1.1383 | val_loss=1.4704 | val_acc=0.509
 Epoch 10 | train_loss=1.1104 | val_loss=1.4675 | val_acc=0.511
 ```
 ![alt text](image-2.png)
+
+---- 
 
 Run 3 : LR = 1e-1, batch_size = 128
 

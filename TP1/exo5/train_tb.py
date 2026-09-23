@@ -45,8 +45,8 @@ class MLP(nn.Module):
     
 # Hyperparamètres (faciles à modifier pour nos futures expériences)
 #hparams = dict(model="MLP", batch_size=32, lr=1e-2, seed=0, weight_decay=0.0)
-hparams = dict(model="MLP", batch_size=32, lr=1e-3, seed=0, weight_decay=0.0)
-#hparams = dict(model="MLP", batch_size=128, lr=1e-1, seed=0, weight_decay=0.0)
+#hparams = dict(model="MLP", batch_size=32, lr=1e-3, seed=0, weight_decay=0.0)
+hparams = dict(model="MLP", batch_size=128, lr=1e-1, seed=0, weight_decay=0.0)
 
 
 # 1. Création d'un nom de dossier unique (modèle + hparams + timestamp)
