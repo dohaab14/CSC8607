@@ -1,0 +1,157 @@
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+
+from dataset import CardioDataset
+from torch.utils.data import DataLoader, random_split
+from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
+
+
+# Dataset
+dataset = CardioDataset("data/cardio_train.csv")
+
+generator = torch.Generator().manual_seed(42)
+
+train_set, val_set, test_set = random_split(
+    dataset,
+    [0.8, 0.1, 0.1],
+    generator=generator
+)
+
+train_loader = DataLoader(train_set, batch_size=64, shuffle=True)
+val_loader = DataLoader(val_set, batch_size=64, shuffle=False)
+test_loader = DataLoader(test_set, batch_size=64, shuffle=False)
+
+
+# Modèle
+class MLP(nn.Module):
+    def __init__(self, input_size, hidden_size):
+        super().__init__()
+
+        self.net = nn.Sequential(
+            nn.Linear(input_size, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, hidden_size),
+            nn.ReLU(),
+            nn.Linear(hidden_size, 1),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
+
+
+# Entraînement du modèle
+def train_model(epochs=30):
+
+    model = MLP(
+        input_size=16,
+        hidden_size=128
+    ).to(device)
+
+    criterion = nn.BCELoss()
+
+    optimizer = optim.RMSprop(
+        model.parameters(),
+        lr=0.001
+    )
+
+    for epoch in range(epochs):
+
+        model.train()
+
+        running_loss = 0.0
+
+        for batch in train_loader:
+
+            inputs = batch["features"].to(device)
+            targets = batch["labels"].to(device)
+
+            optimizer.zero_grad()
+
+            outputs = model(inputs)
+
+            loss = criterion(outputs, targets)
+
+            loss.backward()
+
+            optimizer.step()
+
+            running_loss += loss.item()
+
+        print(f"Epoch {epoch+1}/{epochs} - "f"Loss moyenne: {running_loss / len(train_loader):.4f}")
+
+    return model
+
+
+# Evaluation
+def evaluate_model(model, test_loader):
+
+    model.eval()
+
+    all_targets = []
+    all_preds_probs = []
+
+    with torch.no_grad():
+
+        for batch in test_loader:
+
+            inputs = batch["features"].to(device)
+            targets = batch["labels"].to(device)
+
+            outputs = model(inputs)
+
+            all_targets.extend(
+                targets.cpu().numpy()
+            )
+
+            all_preds_probs.extend(
+                outputs.cpu().numpy()
+            )
+
+    all_targets = np.array(all_targets)
+    all_preds_probs = np.array(all_preds_probs)
+
+    # seuil à 0.5
+    all_preds_classes = (
+        all_preds_probs > 0.5
+    ).astype(int)
+
+    precision = precision_score(
+        all_targets,
+        all_preds_classes
+    )
+
+    recall = recall_score(
+        all_targets,
+        all_preds_classes
+    )
+
+    f1 = f1_score(
+        all_targets,
+        all_preds_classes
+    )
+
+    auc = roc_auc_score(
+        all_targets,
+        all_preds_probs
+    )
+
+    print(
+        f"Precision: {precision:.4f} | "
+        f"Recall: {recall:.4f} | "
+        f"F1: {f1:.4f} | "
+        f"AUC: {auc:.4f}"
+    )
+
+
+# Lancement
+model = train_model()
+
+evaluate_model(model, test_loader)
