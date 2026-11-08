@@ -46,4 +46,5 @@ Résultat `model.py`:
 --- 
 ![alt text](image-6.png)
 ![alt text](image-7.png)
+![alt text](image-8.png)
 FYI : l’entraînement a été réalisé sur un sous-ensemble (960 images, 6 époques) à cause de la limite de temps de l’allocation Slurm
