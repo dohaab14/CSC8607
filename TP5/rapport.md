@@ -41,3 +41,8 @@ partie 3b) - Résultat `model.py`:
 Résultat `model.py`:
 
 ![alt text](image-5.png)
+
+
+--- 
+![alt text](image-6.png)
+FYI : l’entraînement a été réalisé sur un sous-ensemble (960 images, 6 époques) à cause de la limite de temps de l’allocation Slurm
